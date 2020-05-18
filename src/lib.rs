@@ -1,5 +1,7 @@
 mod utils;
 
+extern crate js_sys;
+
 use wasm_bindgen::prelude::*;
 
 // When the `wee_alloc` feature is enabled, use `wee_alloc` as the global
@@ -7,9 +9,6 @@ use wasm_bindgen::prelude::*;
 #[cfg(feature = "wee_alloc")]
 #[global_allocator]
 static ALLOC: wee_alloc::WeeAlloc = wee_alloc::WeeAlloc::INIT;
-
-#[wasm_bindgen]
-extern "C" {}
 
 #[wasm_bindgen]
 #[repr(u8)]
@@ -69,16 +68,15 @@ impl Universe {
         let width = 64;
         let height = 64;
 
-        let mut cells: Vec<Cell> = (0..width * height).map(|_| Cell::Dead).collect();
-        cells[0] = Cell::Alive;
-        cells[3] = Cell::Alive;
-        cells[64 + 4] = Cell::Alive;
-        cells[2 * 64] = Cell::Alive;
-        cells[2 * 64 + 4] = Cell::Alive;
-        cells[3 * 64 + 1] = Cell::Alive;
-        cells[3 * 64 + 2] = Cell::Alive;
-        cells[3 * 64 + 3] = Cell::Alive;
-        cells[3 * 64 + 4] = Cell::Alive;
+        let cells: Vec<Cell> = (0..width * height)
+            .map(|_| {
+                if js_sys::Math::random() < 0.5 {
+                    Cell::Alive
+                } else {
+                    Cell::Dead
+                }
+            })
+            .collect();
 
         Universe {
             width,
