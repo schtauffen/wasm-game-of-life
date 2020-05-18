@@ -69,15 +69,16 @@ impl Universe {
         let width = 64;
         let height = 64;
 
-        let cells = (0..width * height)
-            .map(|i| {
-                if i % 2 == 0 || i % 7 == 0 {
-                    Cell::Alive
-                } else {
-                    Cell::Dead
-                }
-            })
-            .collect();
+        let mut cells: Vec<Cell> = (0..width * height).map(|_| Cell::Dead).collect();
+        cells[0] = Cell::Alive;
+        cells[3] = Cell::Alive;
+        cells[64 + 4] = Cell::Alive;
+        cells[2 * 64] = Cell::Alive;
+        cells[2 * 64 + 4] = Cell::Alive;
+        cells[3 * 64 + 1] = Cell::Alive;
+        cells[3 * 64 + 2] = Cell::Alive;
+        cells[3 * 64 + 3] = Cell::Alive;
+        cells[3 * 64 + 4] = Cell::Alive;
 
         Universe {
             width,
